@@ -5,9 +5,15 @@ from prometheus_client import Counter, Histogram, generate_latest
 
 app = FastAPI()
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
+)
 
+# Prometheus metrics
+# Counts total HTTP requests
 REQUEST_COUNT = Counter("request_count", "Total HTTP requests")
+# Measures request processing time
 REQUEST_TIME = Histogram("request_duration_seconds", "Request duration")
 
 items = []
@@ -18,7 +24,10 @@ async def metrics_middleware(request, call_next):
     response = await call_next(request)
     REQUEST_COUNT.inc()
     REQUEST_TIME.observe(time.time() - start)
-    logging.info(f"{request.method} {request.url.path}")
+    logging.info(
+    f"method={request.method} path={request.url.path} status={response.status_code}"
+)
+
     return response
 
 @app.get("/health")
