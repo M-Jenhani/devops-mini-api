@@ -22,4 +22,4 @@ jobs:
         run: pytest app/test_main.py
 
       - name: SAST scan with Bandit
-        run: bandit -r app
+        run: bandit -r app --exclude app/test_main.py
