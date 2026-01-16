@@ -10,8 +10,10 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s"
 )
 
-
+# Prometheus metrics
+# Counts total HTTP requests
 REQUEST_COUNT = Counter("request_count", "Total HTTP requests")
+# Measures request processing time
 REQUEST_TIME = Histogram("request_duration_seconds", "Request duration")
 
 items = []
